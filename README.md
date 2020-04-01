@@ -1,5 +1,5 @@
 # DPGN: Distribution Propagation Graph Network for Few-shot Learning
-This repository contains the public code for our paper published at CVPR2020 : link
+This repository contains the public code for our paper published at CVPR2020 : [link](https://arxiv.org/abs/2003.14247)
 
 <p align='center'>
   <img src='dpgn.png' width="800px">
