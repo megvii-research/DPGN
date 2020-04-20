@@ -69,7 +69,7 @@ python3 main.py --dataset_root dataset --config config/5way_1shot_resnet12_mini-
 ./logs
 ```
 
-Our model achieves the following performance on mini-ImageNet, tiered-ImageNet, CUB-200-2011 and CIFAR-FS (more detailed experimental results are in the paper)
+Our model achieves the following performance on mini-ImageNet, tiered-ImageNet, CUB-200-2011 and CIFAR-FS (more detailed experimental results are in the paper).
 
 **miniImageNet**:
 
