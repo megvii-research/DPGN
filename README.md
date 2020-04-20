@@ -25,8 +25,7 @@ To install dependencies:
 sudo pip3 install -r requirements.txt
 ```
 ## Dataset
-Download the *mini*-Imagenet dataset from [here](https://drive.google.com/open?id=1RGhzbN1C8gPMop6XBtr7a1afx3rmUGK5). Those pickle files are inhereted from [EGNN](https://drive.google.com/drive/folders/15WuREBvhEbSWo4fTr1r-vMY0C_6QWv4w) paper.
-
+Download the *mini*-Imagenet dataset from [Google Drive](https://drive.google.com/open?id=1RGhzbN1C8gPMop6XBtr7a1afx3rmUGK5) or the official  website.
 The dataset directory should look like this:
 ```bash
 ├── dataset
