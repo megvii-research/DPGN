@@ -11,7 +11,7 @@ Most graph-network-based meta-learning approaches model instance-level relation 
 conveys both the distribution-level relations and instance-level relations in each few-shot learning task. To combine the distribution-level relations and instance-level relations
 for all examples, we construct a dual complete graph network which consists of a point graph and a distribution graph with each node standing for an example. Equipped
 with dual graph architecture, DPGN propagates label information from labeled examples to unlabeled examples within several update generations. In extensive experiments on
-few-shot learning benchmarks, DPGN outperforms state-of-the-art results by a large margin in 5% ∼ 12% under supervised settings and 7% ∼ 13% under semi-supervised settings. Code will be released.
+few-shot learning benchmarks, DPGN outperforms state-of-the-art results by a large margin in 5% ∼ 12% under supervised settings and 7% ∼ 13% under semi-supervised settings.
 
 ## Requirements
 
