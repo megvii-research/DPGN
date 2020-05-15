@@ -34,7 +34,31 @@ The dataset directory should look like this:
         ├── mini_imagenet_test.pickle   
         ├── mini_imagenet_train.pickle  
         ├── mini_imagenet_val.pickle
-
+    ├── tiered-imagenet
+        ├── class_names.txt   
+        ├── synsets.txt  
+        ├── test_images.npz
+        ├── test_labels.pkl   
+        ├── train_images.npz  
+        ├── train_labels.pkl
+        ├── val_images.npz
+        ├── val_labels.pkl
+    ├── cifar-fs
+        ├── cifar_fs_test.pickle   
+        ├── cifar_fs_train.pickle  
+        ├── cifar_fs_val.pickle
+    ├── cub-200-2011
+        ├── attributes   
+        ├── bounding_boxes.txt 
+        ├── classes.txt
+        ├── image   
+        ├── image_class_labels.txt 
+        ├── images
+        ├── images.txt   
+        ├── parts
+        ├── README
+        ├── split
+        ├── train_test_split.txt
 ```
 
 ## Training

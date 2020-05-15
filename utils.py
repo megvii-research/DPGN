@@ -59,7 +59,7 @@ def save_checkpoint(state, is_best, exp_name):
                         os.path.join('{}'.format(exp_name), 'model_best.pth.tar'))
 
 
-def adjust_learning_rate(optimizers, lr, iteration, dec_lr_step):
+def adjust_learning_rate(optimizers, lr, iteration, dec_lr_step, lr_adj_base):
     """
     adjust learning rate after some iterations
     :param optimizers: the optimizers
@@ -68,7 +68,7 @@ def adjust_learning_rate(optimizers, lr, iteration, dec_lr_step):
     :param dec_lr_step: decrease learning rate in how many step
     :return: None
     """
-    new_lr = lr * (0.1 ** (int(iteration / dec_lr_step)))
+    new_lr = lr * (lr_adj_base ** (int(iteration / dec_lr_step)))
     for optimizer in optimizers:
         for param_group in optimizer.param_groups:
             param_group['lr'] = new_lr

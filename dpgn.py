@@ -35,18 +35,22 @@ class PointSimilarity(nn.Module):
         layer_list += [nn.Conv2d(in_channels=self.base_c, out_channels=1, kernel_size=1)]
         self.point_sim_transform = nn.Sequential(*layer_list)
 
-    def forward(self, vp_last_gen, ep_last_gen):
+    def forward(self, vp_last_gen, ep_last_gen, distance_metric):
         """
         Forward method of Point Similarity
         :param vp_last_gen: last generation's node feature of point graph, Vp_(l-1)
         :param ep_last_gen: last generation's edge feature of point graph, Ep_(l-1)
+        :param distance_metric: metric for distance
         :return: edge feature of point graph in current generation Ep_(l) (for Point Loss)
                  l2 version of node similarities
         """
 
         vp_i = vp_last_gen.unsqueeze(2)
         vp_j = torch.transpose(vp_i, 1, 2)
-        vp_similarity = (vp_i - vp_j)**2
+        if distance_metric == 'l2':
+            vp_similarity = (vp_i - vp_j)**2
+        elif distance_metric == 'l1':
+            vp_similarity = torch.abs(vp_i - vp_j)
         trans_similarity = torch.transpose(vp_similarity, 1, 3)
         ep_ij = torch.sigmoid(self.point_sim_transform(trans_similarity))
 
@@ -123,16 +127,20 @@ class DistributionSimilarity(nn.Module):
         layer_list += [nn.Conv2d(in_channels=self.base_c, out_channels=1, kernel_size=1)]
         self.point_sim_transform = nn.Sequential(*layer_list)
 
-    def forward(self, vd_curr_gen, ed_last_gen):
+    def forward(self, vd_curr_gen, ed_last_gen, distance_metric):
         """
         Forward method of Distribution Similarity
         :param vd_curr_gen: current generation's node feature of distribution graph, Vd_(l)
         :param ed_last_gen: last generation's edge feature of distribution graph, Ed_(l-1)
+        :param distance_metric: metric for distance
         :return: edge feature of point graph in current generation Ep_(l)
         """
         vd_i = vd_curr_gen.unsqueeze(2)
         vd_j = torch.transpose(vd_i, 1, 2)
-        vd_similarity = (vd_i - vd_j)**2
+        if distance_metric == 'l2':
+            vd_similarity = (vd_i - vd_j)**2
+        elif distance_metric == 'l1':
+            vd_similarity = torch.abs(vd_i - vd_j)
         trans_similarity = torch.transpose(vd_similarity, 1, 3)
         ed_ij = torch.sigmoid(self.point_sim_transform(trans_similarity))
 
@@ -204,7 +212,7 @@ class D2PAgg(nn.Module):
 
 
 class DPGN(nn.Module):
-    def __init__(self, num_generations, dropout, num_support_sample, num_sample, loss_indicator):
+    def __init__(self, num_generations, dropout, num_support_sample, num_sample, loss_indicator, point_metric, distribution_metric):
         """
         DPGN model
         :param num_generations: number of total generations
@@ -212,6 +220,8 @@ class DPGN(nn.Module):
         :param num_support_sample: number of support sample
         :param num_sample: number of sample
         :param loss_indicator: indicator of what losses are using
+        :param point_metric: metric for distance in point graph
+        :param distribution_metric: metric for distance in distribution graph
         """
         super(DPGN, self).__init__()
         self.generation = num_generations
@@ -219,6 +229,8 @@ class DPGN(nn.Module):
         self.num_support_sample = num_support_sample
         self.num_sample = num_sample
         self.loss_indicator = loss_indicator
+        self.point_metric = point_metric
+        self.distribution_metric = distribution_metric
         # node & edge update module can be formulated by yourselves
         P_Sim = PointSimilarity(128, 128, dropout=self.dropout)
         self.add_module('initial_edge', P_Sim)
@@ -249,11 +261,11 @@ class DPGN(nn.Module):
         point_similarities = []
         distribution_similarities = []
         node_similarities_l2 = []
-        point_edge, _ = self._modules['initial_edge'](middle_node, point_edge)
+        point_edge, _ = self._modules['initial_edge'](middle_node, point_edge, self.point_metric)
         for l in range(self.generation):
-            point_edge, node_similarity_l2 = self._modules['point_sim_generation_{}'.format(l)](point_node, point_edge)
+            point_edge, node_similarity_l2 = self._modules['point_sim_generation_{}'.format(l)](point_node, point_edge, self.point_metric)
             distribution_node = self._modules['point2distribution_generation_{}'.format(l)](point_edge, distribution_node)
-            distribution_edge = self._modules['distribution_sim_generation_{}'.format(l)](distribution_node, distribution_edge)
+            distribution_edge = self._modules['distribution_sim_generation_{}'.format(l)](distribution_node, distribution_edge, self.distribution_metric)
             point_node = self._modules['distribution2point_generation_{}'.format(l)](distribution_edge, point_node)
             point_similarities.append(point_edge * self.loss_indicator[0])
             node_similarities_l2.append(node_similarity_l2 * self.loss_indicator[1])

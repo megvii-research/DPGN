@@ -131,7 +131,8 @@ class DPGNTrainer(object):
             adjust_learning_rate(optimizers=[self.optimizer],
                                  lr=self.train_opt['lr'],
                                  iteration=self.global_step,
-                                 dec_lr_step=self.train_opt['dec_lr'])
+                                 dec_lr_step=self.train_opt['dec_lr'],
+                                 lr_adj_base =self.train_opt['lr_adj_base'])
 
             # log training info
             if self.global_step % self.arg.log_step == 0:
@@ -274,7 +275,7 @@ class DPGNTrainer(object):
             in distribution_similarities]
 
         # combine Point Loss and Distribution Loss
-        distribution_loss_coeff = 0.1 if self.train_opt['loss_indicator'][2] != 0 else 0
+        distribution_loss_coeff = 0.1
         total_edge_loss_generations = [
             total_edge_loss_instance + distribution_loss_coeff * total_edge_loss_distribution
             for (total_edge_loss_instance, total_edge_loss_distribution)
@@ -331,9 +332,9 @@ class DPGNTrainer(object):
 
         # compute total loss
         total_loss = []
-        num_loss = 3 if self.train_opt['num_shots'] == 1 else 6
+        num_loss = self.config['num_loss_generation']
         for l in range(num_loss - 1):
-            total_loss += [total_loss_generations[l].view(-1) * 0.2]
+            total_loss += [total_loss_generations[l].view(-1) * self.config['generation_weight']]
         total_loss += [total_loss_generations[-1].view(-1) * 1.0]
         total_loss = torch.mean(torch.cat(total_loss, 0))
         return total_loss, query_node_acc_generations, query_edge_loss_generations
@@ -502,7 +503,9 @@ def main():
                       train_opt['dropout'],
                       train_opt['num_ways'] * train_opt['num_shots'],
                       train_opt['num_ways'] * train_opt['num_shots'] + train_opt['num_ways'] * train_opt['num_queries'],
-                      train_opt['loss_indicator'])
+                      train_opt['loss_indicator'],
+                      config['point_distance_metric'],
+                      config['distribution_distance_metric'])
 
     # multi-gpu configuration
     [print('GPU: {}  Spec: {}'.format(i, torch.cuda.get_device_name(i))) for i in range(args_opt.num_gpu)]

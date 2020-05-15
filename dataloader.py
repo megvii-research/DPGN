@@ -135,7 +135,7 @@ class Cifar(data.Dataset):
         print('Loading {} dataset -phase {}'.format(category, partition))
         # load data
         if category == 'cifar':
-            dataset_path = os.path.join(self.root, 'cifar-fs', 'cifar-fs_%s.pickle' % self.partition)
+            dataset_path = os.path.join(self.root, 'cifar-fs', 'cifar_fs_%s.pickle' % self.partition)
             with open(dataset_path, 'rb') as handle:
                 u = pickle._Unpickler(handle)
                 u.encoding = 'latin1'
