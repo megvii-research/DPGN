@@ -25,7 +25,7 @@ To install dependencies:
 sudo pip3 install -r requirements.txt
 ```
 ## Dataset
-Download the *mini*-Imagenet dataset from [Google Drive](https://drive.google.com/open?id=1RGhzbN1C8gPMop6XBtr7a1afx3rmUGK5) or make one following the official procedure in [Matching Networks for One Shot Learning](https://arxiv.org/pdf/1606.04080.pdf) using the category list [Google Drive](https://drive.google.com/file/d/1iBu_Iqt49opXHSUNcTRU2WQas1WICLwQ/view) and [ImageNet-2012](http://www.image-net.org/challenges/LSVRC/2012/) dataset. Tiered-ImageNet and CIFAR-FS are from this [repo](https://github.com/kjunelee/MetaOptNet), and CUB-200-2011 is from this [repo](https://github.com/wyharveychen/CloserLookFewShot).
+Download the *mini*-Imagenet dataset from [Google Drive](https://drive.google.com/open?id=1RGhzbN1C8gPMop6XBtr7a1afx3rmUGK5) or make one following the official procedure in [Matching Networks for One Shot Learning](https://arxiv.org/pdf/1606.04080.pdf) using the category list [Google Drive](https://drive.google.com/file/d/1iBu_Iqt49opXHSUNcTRU2WQas1WICLwQ/view) and [ImageNet-2012](http://www.image-net.org/challenges/LSVRC/2012/) dataset.
 
 The dataset directory should look like this:
 ```bash
