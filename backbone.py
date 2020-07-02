@@ -3,7 +3,7 @@ import torch.nn as nn
 
 class ResNet12Block(nn.Module):
     """
-    ResNet block
+    ResNet Block
     """
     def __init__(self, inplanes, planes):
         super(ResNet12Block, self).__init__()
@@ -45,7 +45,7 @@ class ResNet12Block(nn.Module):
 
 class ResNet12(nn.Module):
     """
-    ResNet12 backbone
+    ResNet12 Backbone
     """
     def __init__(self, emb_size, block=ResNet12Block, cifar_flag=False):
         super(ResNet12, self).__init__()
@@ -116,7 +116,7 @@ class ResNet12(nn.Module):
 
 class ConvNet(nn.Module):
     """
-    Conv4 backbone
+    Conv4 Backbone
     """
     def __init__(self, emb_size, cifar_flag=False):
         super(ConvNet, self).__init__()

@@ -490,7 +490,7 @@ def main():
         print('Backbone: ConvNet')
     else:
         logger.info('Invalid backbone: {}, please specify a backbone model from '
-                    'convnet and resnet12.'.format(config['backbone']))
+                    'convnet or resnet12.'.format(config['backbone']))
         exit()
 
     gnn_module = DPGN(config['num_generation'],
